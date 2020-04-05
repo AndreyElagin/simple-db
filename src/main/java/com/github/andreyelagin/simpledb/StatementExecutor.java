@@ -2,13 +2,19 @@ package com.github.andreyelagin.simpledb;
 
 public class StatementExecutor {
 
+  private final Table table;
+
+  public StatementExecutor(Table table) {
+    this.table = table;
+  }
+
   public void execute(Statement statement) {
     switch (statement.getType()) {
       case STATEMENT_INSERT:
-        System.out.println("This is where we would do an insert.");
+        table.addRow(statement.getRowToInsert());
         break;
       case STATEMENT_SELECT:
-        System.out.println("This is where we would do a select.");
+        table.getAllRows().forEach(System.out::println);
         break;
     }
   }

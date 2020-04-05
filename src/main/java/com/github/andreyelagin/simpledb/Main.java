@@ -9,7 +9,8 @@ public class Main {
     var reader = new BufferedReader(new InputStreamReader(System.in));
     var metaCommandMachine = new MetaCommandMachine();
     var prepareResultMachine = new PrepareResultMachine();
-    var statementExecutor = new StatementExecutor();
+    var table = new Table();
+    var statementExecutor = new StatementExecutor(table);
 
     while (true) {
       try {
@@ -33,9 +34,8 @@ public class Main {
           var statement = statementBuilder.build();
 
           statementExecutor.execute(statement);
-
+          System.out.println("Executed");
         }
-        System.out.println("Executed");
       } catch (Throwable e) {
         System.err.println(e.getMessage());
       }
