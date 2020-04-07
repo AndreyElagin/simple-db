@@ -45,20 +45,18 @@ public class Row {
 
   public static Row deserialize(ByteBuffer page, int row) {
     var beginOffset = (row % ROWS_PER_PAGE) * ROW_SIZE;
-    page.position(beginOffset);
 
     int id = page.getInt(beginOffset);
 
     byte[] name = new byte[USERNAME_SIZE];
-    for (int i = USERNAME_OFFSET; i < USERNAME_SIZE; i++) {
-      name[i - USERNAME_OFFSET] = page.get(i);
+    for (int i = USERNAME_OFFSET + beginOffset, j = 0; i < USERNAME_SIZE + beginOffset; i++, j++) {
+      name[j] = page.get(i);
     }
-
     var userName = new String(name, Charset.forName(UTF_8.name())).trim();
 
     byte[] email = new byte[EMAIL_SIZE];
-    for (int i = EMAIL_OFFSET; i < EMAIL_SIZE; i++) {
-      email[i - EMAIL_OFFSET] = page.get(i);
+    for (int i = EMAIL_OFFSET + beginOffset, j = 0; i < EMAIL_SIZE + beginOffset; i++, j++) {
+      email[j] = page.get(i);
     }
     var userEmail = new String(email, Charset.forName(UTF_8.name())).trim();
 

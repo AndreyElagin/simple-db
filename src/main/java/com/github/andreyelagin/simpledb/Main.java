@@ -7,9 +7,9 @@ import java.io.InputStreamReader;
 public class Main {
   public static void main(String[] args) throws IOException {
     var reader = new BufferedReader(new InputStreamReader(System.in));
-    var metaCommandMachine = new MetaCommandMachine();
     var prepareResultMachine = new PrepareResultMachine();
     var table = new Table();
+    var metaCommandMachine = new MetaCommandMachine(table);
     var statementExecutor = new StatementExecutor(table);
 
     while (true) {
@@ -17,7 +17,14 @@ public class Main {
         printPrompt();
         var cmd = reader.readLine();
         if (cmd != null && cmd.startsWith(".")) {
-          metaCommandMachine.handle(cmd);
+          switch (metaCommandMachine.handle(cmd)) {
+            case META_COMMAND_SUCCESS:
+              System.out.printf("Command '%s' successfully executed\n", cmd);
+              break;
+            case META_COMMAND_UNRECOGNIZED_COMMAND:
+              System.out.printf("Unrecognized command '%s'\n", cmd);
+              break;
+          }
         } else {
 
           var statementBuilder = new Statement.Builder();

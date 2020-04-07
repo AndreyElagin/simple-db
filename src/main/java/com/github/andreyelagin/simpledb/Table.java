@@ -51,6 +51,7 @@ public class Table {
 
   public void clearTable() {
     Arrays.fill(pages, null);
+    numRows = 0;
   }
 
   public int getNumRows() {
