@@ -2,6 +2,7 @@ package com.github.andreyelagin.simpledb;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.Objects;
 
 import static com.github.andreyelagin.simpledb.Constants.*;
 import static com.github.andreyelagin.simpledb.Table.ROWS_PER_PAGE;
@@ -34,6 +35,16 @@ public class Row {
     var arr = ByteBuffer.allocate(ID_SIZE + USERNAME_SIZE + EMAIL_SIZE);
     arr.putInt(id);
 
+    if (id < 0) {
+      throw new RuntimeException("id can't be negative");
+    }
+    if (userName.length() > USERNAME_SIZE) {
+      throw new RuntimeException("user name to long");
+    }
+    if (email.length() > EMAIL_SIZE) {
+      throw new RuntimeException("email to long");
+    }
+
     arr.position(USERNAME_OFFSET);
     arr.put(userName.getBytes(UTF_8), 0, userName.length());
 
@@ -61,6 +72,21 @@ public class Row {
     var userEmail = new String(email, Charset.forName(UTF_8.name())).trim();
 
     return new Row(id, userName, userEmail);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Row row = (Row) o;
+    return id == row.id &&
+        Objects.equals(userName, row.userName) &&
+        Objects.equals(email, row.email);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, userName, email);
   }
 
   @Override

@@ -9,7 +9,8 @@ import static com.github.andreyelagin.simpledb.StatementType.STATEMENT_SELECT;
 
 public class PrepareResultMachine {
 
-  private static final Pattern insert = Pattern.compile("insert (\\d+)\\s(\\w{1,32})\\s([\\w@.]{1,255})");
+  private static final Pattern insert =
+      Pattern.compile("insert (\\d+)\\s(\\w{1,32})\\s([\\w@.]{1,255})");
 
   public PrepareResult handle(String rawCommand, Statement.Builder builder) {
     PrepareResult result;
