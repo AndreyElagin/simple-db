@@ -1,7 +1,5 @@
 package com.github.andreyelagin.simpledb;
 
-import jdk.jfr.Unsigned;
-
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,8 +14,13 @@ public class Table {
   public static final int ROWS_PER_PAGE = PAGE_SIZE / ROW_SIZE;
   public static final int TABLE_MAX_ROWS = ROWS_PER_PAGE * TABLE_MAX_PAGES;
 
-  private int numRows;
-  private ByteBuffer[] pages = new ByteBuffer[TABLE_MAX_PAGES];
+  private int numRows = 0;
+//  private ByteBuffer[] pages = new ByteBuffer[TABLE_MAX_PAGES];
+  private final Pager pager;
+
+  public Table(Pager pager) {
+    this.pager = pager;
+  }
 
   public Row deserialize(int pos) {
     return null;
@@ -28,11 +31,7 @@ public class Table {
       throw new RuntimeException("Table is full of shit");
     }
 
-    var page = pages[numRows / ROWS_PER_PAGE];
-    if (page == null) {
-      page = ByteBuffer.allocateDirect(PAGE_SIZE);
-      pages[numRows / ROWS_PER_PAGE] = page;
-    }
+    var page = pager.getPage(numRows);
 
     page.position((numRows % ROWS_PER_PAGE) * ROW_SIZE);
     page.put(row.serialize());
@@ -43,14 +42,14 @@ public class Table {
   public List<Row> getAllRows() {
     var rows = new ArrayList<Row>();
     for (int i = 0; i < numRows; i++) {
-      var page = pages[i / ROWS_PER_PAGE];
+      var page = pager.getPage(i);
       rows.add(Row.deserialize(page, i));
     }
     return rows;
   }
 
   public void clearTable() {
-    Arrays.fill(pages, null);
+//    Arrays.fill(pages, null);
     numRows = 0;
   }
 
@@ -62,7 +61,7 @@ public class Table {
     this.numRows = numRows;
   }
 
-  public ByteBuffer[] getPages() {
-    return pages;
-  }
+//  public ByteBuffer[] getPages() {
+//    return pages;
+//  }
 }

@@ -1,14 +1,13 @@
 package com.github.andreyelagin.simpledb;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     var reader = new BufferedReader(new InputStreamReader(System.in));
     var prepareResultMachine = new PrepareResultMachine();
-    var table = new Table();
+    var table = new Table(null);
     var metaCommandMachine = new MetaCommandMachine(table);
     var statementExecutor = new StatementExecutor(table);
 

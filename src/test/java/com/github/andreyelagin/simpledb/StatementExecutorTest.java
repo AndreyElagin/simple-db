@@ -18,7 +18,7 @@ class StatementExecutorTest {
   @Test
   @DisplayName("should return exact number of rows which was inserted")
   void test1() {
-    var table = new Table();
+    var table = new Table(null);
     var exec = new StatementExecutor(table);
     var expectedRow = new Row(666, "vasian", "google@goolag");
     var insertStatement = new Statement(STATEMENT_INSERT, expectedRow);
@@ -31,7 +31,7 @@ class StatementExecutorTest {
   @Test
   @DisplayName("should fail when table overflow")
   void test2() {
-    var table = new Table();
+    var table = new Table(null);
     var executor = new StatementExecutor(table);
 
     assertThrows(
@@ -54,7 +54,7 @@ class StatementExecutorTest {
   @Test
   @DisplayName("should fail to insert either long name or email")
   void test3() {
-    var table = new Table();
+    var table = new Table(null);
     var exec = new StatementExecutor(table);
     var longNameRow = new Row(666, generateRandomString(33), "google@goolag");
     var longEmailRow = new Row(777, "vasian", generateRandomString(256));
@@ -76,7 +76,7 @@ class StatementExecutorTest {
   @Test
   @DisplayName("should fail when id is negative")
   void test4() {
-    var table = new Table();
+    var table = new Table(null);
     var exec = new StatementExecutor(table);
     var longNameRow = new Row(-666, generateRandomString(), "google@goolag");
     var nameStatement = new Statement(STATEMENT_INSERT, longNameRow);
